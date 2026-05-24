@@ -2,10 +2,6 @@
 
 {% block title %}Problems{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="/assets/styles/app.css">
-{% endblock %}
-
 {% block body %}
     <div class="container mt-5 table-responsive">
         <table class="table table-striped align-middle table-hover caption-top test-info">
@@ -27,7 +23,7 @@
                             <small>{{ problem.category }}</small>
                         </td>
                         <td>
-                            {% set diff = ("now"|date).diff(problem.createdAt).days < 5 ? 'New' : '' %}
+                            {% set diff = problem.createdAt and date().diff(problem.createdAt).days < 5 ? 'New' : '' %}
                             {{ diff }}
                         </td>
                         <td><h6 class="text-secondary">{{ problem.difficulty }}</h6></td>

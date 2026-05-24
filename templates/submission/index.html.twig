@@ -2,17 +2,10 @@
 
 {% block title %}Submissions{% endblock %}
 
-{% block stylesheets %}
-    <link rel="stylesheet" href="/assets/css/style.css">
-{% endblock %}
-
 {% block body %}
     <div class="container mt-4">
         <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr><th>ID</th><th>User</th><th>Problem</th><th>Lang</th><th>Verdict</th><th>Submitted</th></tr>
-                </thead>
+            <table class="table table-striped align-middle table-hover caption-top test-info">
                 <caption>
                     Submissions
                     {% if currentUser %}
@@ -32,17 +25,20 @@
                         </div>
                     {% endif %}
                 </caption>
-                <tbody>
-                {% for s in submissions %}
+                <thead>
                     <tr>
-                        <td>{{ s.id }}</td>
-                        <td>{{ s.user.username }}</td>
-                        <td><a href="{{ path('problems_show', {id: s.problem.id}) }}">{{ s.problem.title }}</a></td>
-                        <td>{{ s.language.name }}</td>
-                        <td>{{ s.verdict ? s.verdict.verdict : 'PENDING' }}</td>
-                        <td>{{ s.submittedAt ? s.submittedAt|date('Y-m-d H:i') : '' }}</td>
+                        <th scope="col">Id</th>
+                        <th scope="col">Submission Time</th>
+                        <th scope="col">Username</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Language</th>
+                        <th scope="col">Verdict</th>
+                        <th scope="col">Difficulity</th>
+                        <th scope="col">Runtime</th>
+                        <th scope="col">Memory</th>
                     </tr>
-                {% endfor %}
+                </thead>
+                <tbody>
                 </tbody>
             </table>
         </div>

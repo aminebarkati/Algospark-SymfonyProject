@@ -3,6 +3,7 @@
 {% block title %}Problem {{ problem.id }} - {{ problem.title }}{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <link rel="stylesheet" href="/assets/css/problem.css">
 {% endblock %}
 
