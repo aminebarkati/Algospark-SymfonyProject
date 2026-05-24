@@ -64,4 +64,10 @@ class AuthController extends AbstractController
 
         return new JsonResponse(['success' => true, 'redirect' => $this->generateUrl('problems_index')]);
     }
+    #[Route(path: '/logout', name: 'app_logout')]
+    public function logout(): void
+    {
+        // Symfony will intercept this route
+        throw new \Exception('This should never be reached.');
+    }
 }

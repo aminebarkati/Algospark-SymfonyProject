@@ -3,7 +3,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: \App\Repository\TestCaseRepository::class)]
 #[ORM\Table(name: 'test_cases')]
 class TestCase
 {
@@ -29,4 +29,28 @@ class TestCase
     public function getInput(): string { return $this->input; }
     public function getExpectedOutput(): string { return $this->expectedOutput; }
     public function isSample(): bool { return $this->isSample; }
+
+    public function setProblem(Problem $problem): self
+    {
+        $this->problem = $problem;
+        return $this;
+    }
+
+    public function setInput(string $input): self
+    {
+        $this->input = $input;
+        return $this;
+    }
+
+    public function setExpectedOutput(string $expectedOutput): self
+    {
+        $this->expectedOutput = $expectedOutput;
+        return $this;
+    }
+
+    public function setSample(bool $isSample): self
+    {
+        $this->isSample = $isSample;
+        return $this;
+    }
 }

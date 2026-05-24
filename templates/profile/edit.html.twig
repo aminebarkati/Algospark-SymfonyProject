@@ -34,7 +34,7 @@
                                 {% if targetUser %}
                                     <span id="profileRoleBadge" class="badge text-bg-primary me-2">Role: {{ targetUser.isAdmin ? 'Admin' : 'User' }}</span>
                                     <span id="profileRatingBadge" class="badge text-bg-light">Rating: {{ targetUser.rating }}</span>
-                                    {% if actorUser and actorUser.id != targetUser.id and actorUser.admin %}
+                                    {% if actorUser and actorUser.id != targetUser.id and is_granted('ROLE_ADMIN') %}
                                         <span class="badge text-bg-warning ms-2">Admin managing this account</span>
                                     {% endif %}
                                 {% endif %}
@@ -48,7 +48,7 @@
                 {% if not targetUser %}
                     <div class="alert alert-warning" role="alert">You need to log in to access and update your profile.</div>
                 {% else %}
-                                    {% set isAdminViewer = actorUser and actorUser.isAdmin %}
+                                    {% set isAdminViewer = actorUser and is_granted('ROLE_ADMIN') %}
                     {% set isManagingOtherUser = isAdminViewer and actorUser.id != targetUser.id %}
                     {% set requireCurrentPassword = not isManagingOtherUser %}
                     <div class="row g-4">

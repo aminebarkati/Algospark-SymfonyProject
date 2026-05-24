@@ -4,6 +4,11 @@
 
 {% block body %}
     <div class="container mt-5 table-responsive">
+        {% if is_granted('ROLE_ADMIN') %}
+            <div class="d-flex justify-content-end mb-3">
+                <a class="btn btn-primary" href="{{ path('admin_problem_new') }}">Add Problem</a>
+            </div>
+        {% endif %}
         <table class="table table-striped align-middle table-hover caption-top test-info">
             <caption>Available problems</caption>
             <thead>

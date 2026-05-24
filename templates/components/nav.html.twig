@@ -13,6 +13,7 @@
                 <li><a href="{{ path('submissions_index') }}" class="tabs nav-link text-white"> Submissions </a></li>
                 <li><a href="{{ path('leaderboard_index') }}" class="tabs nav-link text-white"> Leaderboard </a></li>
                 {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('admin_problem_new') }}" class="tabs nav-link text-white"> Add Problem </a></li>
                     <li><a href="{{ path('users_index') }}" class="tabs nav-link text-white"> Users </a></li>
                 {% else %}
                     <li><a href="{{ path('profile_show_current') }}" class="tabs nav-link text-white"> Profile </a></li>
