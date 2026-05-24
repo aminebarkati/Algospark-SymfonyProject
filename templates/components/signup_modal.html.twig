@@ -1,0 +1,86 @@
+<div
+    class="modal fade"
+    id="signmodal"
+    tabindex="-1"
+    aria-labelledby="signmodalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="signmodalLabel">
+                    Sign-up
+                </h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="signupform" novalidate>
+                    <div class="vstack gap-3">
+                        <div class="form-floating px-1">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="floatingInputValue11"
+                                placeholder="username1"
+                                name="username"
+                                required />
+                            <label for="floatingInputValue11">Username</label>
+                        </div>
+                        <div class="form-floating px-1">
+                            <input
+                                type="email"
+                                class="form-control"
+                                id="floatingInputValue22"
+                                placeholder="name@example.com"
+                                name="email"
+                                required />
+                            <label for="floatingInputValue22">email</label>
+                        </div>
+
+                        <div class="form-floating px-1">
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="floatingInputValue33"
+                                name="password"
+                                placeholder="***"
+                                required />
+                            <label for="floatingInputValue33">password</label>
+                        </div>
+                        <div class="form-floating px-1">
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="floatingInputValue44"
+                                name="inputform"
+                                placeholder="***"
+                                required
+                                disabled />
+                            <label for="floatingInputValue44">confirm password</label>
+                        </div>
+                        <pre
+                            class="alert alert-danger"
+                            id="passalert2"
+                            style="display: none"></pre>
+                        <div class="d-flex justify-content-end">
+                            <input
+                                type="submit"
+                                class="btn btn-primary me-2"
+                                value="Sign-up" />
+                            <button
+                                type="button"
+                                class="btn btn-light me-2"
+                                data-bs-dismiss="modal"
+                                name="reset">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

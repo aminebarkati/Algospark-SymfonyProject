@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Leaderboard{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 table-responsive">
+        <table class="table table-striped align-middle table-hover caption-top test-info">
+            <caption>Leaderboard</caption>
+            <thead>
+                <th scope="col">Rank</th>
+                <th scope="col">Username</th>
+                <th scope="col">Rating</th>
+            </thead>
+            <tbody class="table-group-divider">
+                {% for user in users %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="{{ path('profile_show', {username: user.username}) }}"><h6 class="text-info">{{ user.username }}</h6></a></td>
+                        <td>{{ user.rating }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

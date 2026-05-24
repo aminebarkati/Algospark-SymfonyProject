@@ -1,0 +1,62 @@
+<div
+    class="modal fade"
+    id="LogModal"
+    tabindex="-1"
+    aria-labelledby="LogModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="LogModalLabel">Login</h1>
+                <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form" id="loginform" novalidate>
+                    <div class="vstack gap-3">
+                        <div class="form-floating px-1">
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="floatingInputValue1"
+                                name="username"
+                                placeholder="username1"
+                                required />
+                            <label for="floatingInputValue1">Username</label>
+                        </div>
+                        <div class="form-floating px-1">
+                            <input
+                                type="password"
+                                class="form-control"
+                                id="floatingInputValue3"
+                                name="password"
+                                placeholder="***"
+                                required />
+                            <label for="floatingInputValue3">password</label>
+                        </div>
+                        <pre
+                            class="alert alert-danger"
+                            id="passalert"
+                            style="display: none"></pre>
+                        <div class="d-flex justify-content-end">
+                            <input
+                                type="submit"
+                                class="btn btn-primary me-2"
+                                value="Login" />
+                            <button
+                                type="button"
+                                class="btn btn-light me-2"
+                                name="reset"
+                                data-bs-dismiss="modal">
+                                Close
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

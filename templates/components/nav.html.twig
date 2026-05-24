@@ -1,0 +1,28 @@
+<div class="px-3 py-4 border-bottom nav1" id="#">
+    <div class="container">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+            <a href="#" class="d-flex align-items-center my-2 my-lg-0 me-lg-auto text-white text-decoration-none">
+                <div class="d-flex justify-content-center align-items-center">
+                    <object data="/assets/media/svg-components/code-slash.svg" type="image/svg+xml" width="50" height="50" class="px-1"></object>
+                    <div class="px-1 mb-0 h4 text-white">AlgoSpark</div>
+                </div>
+            </a>
+            <ul class="nav col-12 col-lg-auto my-2 justify-content-center my-md-0 text-small">
+                <li><a href="/" class="tabs nav-link text-white"> Home </a></li>
+                <li><a href="{{ path('problems_index') }}" class="tabs nav-link text-white"> Problemset </a></li>
+                <li><a href="{{ path('submissions_index') }}" class="tabs nav-link text-white"> Submissions </a></li>
+                <li><a href="{{ path('leaderboard_index') }}" class="tabs nav-link text-white"> Leaderboard </a></li>
+                {% if is_granted('ROLE_ADMIN') %}
+                    <li><a href="{{ path('users_index') }}" class="tabs nav-link text-white"> Users </a></li>
+                {% else %}
+                    <li><a href="{{ path('profile_show_current') }}" class="tabs nav-link text-white"> Profile </a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</div>
+<a href="#">
+    <svg xmlns="http://www.w3.org/2000/svg" height="55px" viewBox="0 -960 960 960" class="up-btn" width="55px" fill="currentColor">
+        <path d="m280-400 200-201 200 201H280Z" />
+    </svg>
+</a>

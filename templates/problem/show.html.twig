@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Problem {{ problem.id }} - {{ problem.title }}{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/assets/css/problem.css">
+{% endblock %}
+
+{% block body %}
+    <main class="container mt-4">
+        <div class="row g-0">
+            <div class="col-12 col-lg-8 border-end p-4 problem-pane">
+                <div class="mb-4">
+                    <a href="{{ app.request.headers.get('referer') ?: path('problems_index') }}" class="text-decoration-none text-secondary">← Back </a>
+                </div>
+
+                <div class="mb-4">
+                    <h1 class="h3 mb-2"><span class="text-info">{{ problem.id }} - </span>{{ problem.title }}</h1>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span class="badge text-bg-info">{{ problem.category }}</span>
+                        <span class="badge text-bg-secondary">AC: {{ problem.successCount }} / {{ problem.totalAttempts }}</span>
+                        <span class="badge text-bg-secondary">Acceptance: {{ problem.acceptanceRate }}%</span>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="mb-3">Description</h5>
+                    <div class="card border-0 bg-light p-3"><p>{{ problem.description|nl2br }}</p></div>
+                </div>
+
+                {% if testCases|length > 0 %}
+                    <div class="mb-4">
+                        <h5 class="mb-3">Sample Test Cases</h5>
+                        {% for tc in testCases %}
+                            <div class="card mb-3 border">
+                                <div class="card-header bg-secondary text-white py-2"><strong>Example {{ loop.index }}</strong></div>
+                                <div class="card-body p-3">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold mb-0">Input</label>
+                                        <pre class="bg-light p-3 rounded problem-io-code"><code>{{ tc.input }}</code></pre>
+                                    </div>
+                                    <div>
+                                        <label class="form-label fw-bold mb-0">Output</label>
+                                        <pre class="bg-light p-3 rounded problem-io-code"><code>{{ tc.expectedOutput }}</code></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="alert alert-info mb-4">No sample test cases available for this problem.</div>
+                {% endif %}
+            </div>
+
+            <div class="col-12 col-lg-4 p-4 problem-pane">
+                <div class="card shadow-sm border-0 problem-side-card">
+                    <div class="card-header bg-primary text-white py-3"><h5 class="mb-0">Problem Actions</h5></div>
+                    <div class="card-body">
+                        {% if app.user %}
+                            <button type="button" class="btn btn-success w-100" data-bs-toggle="modal" data-bs-target="#submitSolutionModal">Submit Solution</button>
+                        {% else %}
+                            <div class="alert alert-warning" role="alert">
+                                <h6 class="mb-2">Please Log In</h6>
+                                <p class="mb-0">You need to be logged in to submit a solution. Please log in or sign up to continue.</p>
+                                <button class="btn btn-light btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#LogModal">Log In</button>
+                                <button class="btn btn-primary btn-sm mt-3" data-bs-toggle="modal" data-bs-target="#signmodal">Sign Up</button>
+                            </div>
+                        {% endif %}
+
+                        <div id="submissionMessage" class="alert d-none mt-3" role="alert"></div>
+
+                        <div class="mt-4 pt-4 border-top">
+                            <h6 class="mb-3">Recent Submissions</h6>
+                            <div id="recentSubmissions" class="text-muted" data-problem-id="{{ problem.id }}">
+                                <small>Loading submissions...</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {% if app.user %}
+            <div class="modal fade" id="submitSolutionModal" tabindex="-1" aria-labelledby="submitSolutionModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="submitSolutionModalLabel">Submit Solution</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="submissionForm" method="post" action="{{ path('submission_create', {id: problem.id}) }}">
+                                <input type="hidden" name="problem_id" value="{{ problem.id }}">
+
+                                <div class="mb-3">
+                                    <label for="languageSelect" class="form-label fw-bold">Programming Language</label>
+                                    <select id="languageSelect" name="language_id" class="form-select" required>
+                                        <option value="">-- Select Language --</option>
+                                        {% for language in languages %}
+                                            <option value="{{ language.id }}" data-extension="{{ language.fileExtension ?: '' }}">{{ language.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="codeInput" class="form-label fw-bold">Code</label>
+                                    <textarea id="codeInput" name="code" class="form-control problem-code-textarea" rows="13" placeholder="// Write your solution here..."></textarea>
+                                    <small class="text-muted d-block mt-2">Max size: 256KB</small>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="solutionFile" class="form-label fw-bold">Attach Solution File (optional)</label>
+                                    <input type="file" id="solutionFile" name="solution_file" class="form-control" accept=".cpp,.cc,.c,.h,.hpp,.py,.java,.js,.ts,.txt">
+                                    <small class="text-muted d-block mt-2">If the code textarea is empty, attached file content will be used.</small>
+                                </div>
+
+                                <div id="submissionModalMessage" class="alert d-none mt-3" role="alert"></div>
+
+                                <button type="submit" class="btn btn-success w-100">Submit</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+    </main>
+
+{% endblock %}

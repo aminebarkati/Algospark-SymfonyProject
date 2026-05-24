@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Problems{% endblock %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/assets/styles/app.css">
+{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 table-responsive">
+        <table class="table table-striped align-middle table-hover caption-top test-info">
+            <caption>Available problems</caption>
+            <thead>
+                <th>Id</th>
+                <th>Title</th>
+                <th></th>
+                <th>difficulity</th>
+                <th>Solves</th>
+                <th>Success Rate</th>
+            </thead>
+            <tbody>
+                {% for problem in problems %}
+                    <tr>
+                        <td>{{ problem.id }}</td>
+                        <td>
+                            <a href="{{ path('problems_show', {id: problem.id}) }}"><h6 class="text-info">{{ problem.title }}</h6></a>
+                            <small>{{ problem.category }}</small>
+                        </td>
+                        <td>
+                            {% set diff = ("now"|date).diff(problem.createdAt).days < 5 ? 'New' : '' %}
+                            {{ diff }}
+                        </td>
+                        <td><h6 class="text-secondary">{{ problem.difficulty }}</h6></td>
+                        <td>{{ problem.successCount }}</td>
+                        <td>{{ problem.acceptanceRate }} %</td>
+                        <td><a href="{{ path('problems_show', {id: problem.id}) }}" class="enterBtn text-info">Enter &gt;</a></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
