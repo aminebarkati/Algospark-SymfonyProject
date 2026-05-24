@@ -46,6 +46,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
+        $this->roles = [];
         $this->createdAt = new \DateTimeImmutable();
     }
 
@@ -59,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     // UserInterface compatibility
     public function getRoles(): array
     {
-        $roles = $this->roles;
+        $roles = isset($this->roles) ? $this->roles : [];
         if ($this->isAdmin) {
             $roles[] = 'ROLE_ADMIN';
         }

@@ -15,10 +15,15 @@
                     <a href="{{ app.request.headers.get('referer') ?: path('problems_index') }}" class="text-decoration-none text-secondary">← Back </a>
                 </div>
 
+                {% set difficultyValue = problem.difficulty %}
+                {% set difficultyLabel = difficultyValue < 1000 ? 'Easy' : (difficultyValue < 1400 ? 'Medium' : 'Hard') %}
+                {% set difficultyClass = difficultyValue < 1000 ? 'text-bg-success' : (difficultyValue < 1400 ? 'text-bg-warning' : 'text-bg-danger') %}
+
                 <div class="mb-4">
                     <h1 class="h3 mb-2"><span class="text-info">{{ problem.id }} - </span>{{ problem.title }}</h1>
                     <div class="d-flex flex-wrap gap-2 mb-3">
                         <span class="badge text-bg-info">{{ problem.category }}</span>
+                        <span class="badge {{ difficultyClass }}">{{ difficultyLabel }}</span>
                         <span class="badge text-bg-secondary">AC: {{ problem.successCount }} / {{ problem.totalAttempts }}</span>
                         <span class="badge text-bg-secondary">Acceptance: {{ problem.acceptanceRate }}%</span>
                     </div>
@@ -27,6 +32,16 @@
                 <div class="mb-4">
                     <h5 class="mb-3">Description</h5>
                     <div class="card border-0 bg-light p-3"><p>{{ problem.description|nl2br }}</p></div>
+                </div>
+
+                <div class="mb-4">
+                    <h5 class="mb-3">Constraints</h5>
+                    <div class="card border-0 bg-light p-3">
+                        <ul class="mb-0">
+                            <li>Time Limit: <strong>{{ problem.timeLimitMs }}ms</strong></li>
+                            <li>Memory Limit: <strong>{{ problem.memoryLimitMb }}MB</strong></li>
+                        </ul>
+                    </div>
                 </div>
 
                 {% if testCases|length > 0 %}

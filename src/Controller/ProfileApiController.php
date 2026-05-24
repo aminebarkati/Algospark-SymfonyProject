@@ -9,17 +9,17 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
+#[IsGranted('ROLE_USER')]
 class ProfileApiController extends AbstractController
 {
     #[Route('/api/profile/avatar', name: 'api_profile_avatar', methods: ['POST'])]
     public function updateAvatar(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        /** @var User $actor */
         $actor = $this->getUser();
-        if (!$actor instanceof User) {
-            return new JsonResponse(['success' => false, 'message' => 'Unauthorized. Please log in.'], Response::HTTP_UNAUTHORIZED);
-        }
 
         $targetUser = $this->resolveTargetUser($request, $doctrine, $actor);
         if (!$targetUser) {
@@ -53,10 +53,8 @@ class ProfileApiController extends AbstractController
     #[Route('/api/profile/details', name: 'api_profile_details', methods: ['POST'])]
     public function updateProfile(Request $request, ManagerRegistry $doctrine, UserRepository $userRepository): JsonResponse
     {
+        /** @var User $actor */
         $actor = $this->getUser();
-        if (!$actor instanceof User) {
-            return new JsonResponse(['success' => false, 'message' => 'Unauthorized. Please log in.'], Response::HTTP_UNAUTHORIZED);
-        }
 
         $targetUser = $this->resolveTargetUser($request, $doctrine, $actor);
         if (!$targetUser) {
@@ -88,17 +86,15 @@ class ProfileApiController extends AbstractController
     #[Route('/api/profile/password', name: 'api_profile_password', methods: ['POST'])]
     public function updatePassword(Request $request, ManagerRegistry $doctrine, UserPasswordHasherInterface $hasher): JsonResponse
     {
+        /** @var User $actor */
         $actor = $this->getUser();
-        if (!$actor instanceof User) {
-            return new JsonResponse(['success' => false, 'message' => 'Unauthorized. Please log in.'], Response::HTTP_UNAUTHORIZED);
-        }
 
         $targetUser = $this->resolveTargetUser($request, $doctrine, $actor);
         if (!$targetUser) {
             return new JsonResponse(['success' => false, 'message' => 'Target user not found.'], Response::HTTP_NOT_FOUND);
         }
 
-        $isAdminEditingOther = $actor->isAdmin() && $actor->getId() !== $targetUser->getId();
+        $isAdminEditingOther = $this->isGranted('ROLE_ADMIN') && $actor->getId() !== $targetUser->getId();
         if (!$isAdminEditingOther) {
             $currentPassword = (string) $request->request->get('current_password', '');
             if (!$hasher->isPasswordValid($targetUser, $currentPassword)) {
@@ -121,13 +117,12 @@ class ProfileApiController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'Password updated successfully.']);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/api/profile/role', name: 'api_profile_role', methods: ['POST'])]
     public function updateRole(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        /** @var User $actor */
         $actor = $this->getUser();
-        if (!$actor instanceof User || !$actor->isAdmin()) {
-            return new JsonResponse(['success' => false, 'message' => 'Forbidden. Admin privileges are required.'], Response::HTTP_FORBIDDEN);
-        }
 
         $targetUser = $this->resolveTargetUser($request, $doctrine, $actor);
         if (!$targetUser) {
@@ -141,13 +136,12 @@ class ProfileApiController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'Role updated successfully.', 'user' => $this->serializeUser($targetUser)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/api/profile/deduct-points', name: 'api_profile_deduct_points', methods: ['POST'])]
     public function deductPoints(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        /** @var User $actor */
         $actor = $this->getUser();
-        if (!$actor instanceof User || !$actor->isAdmin()) {
-            return new JsonResponse(['success' => false, 'message' => 'Forbidden. Admin privileges are required.'], Response::HTTP_FORBIDDEN);
-        }
 
         $targetUser = $this->resolveTargetUser($request, $doctrine, $actor);
         if (!$targetUser) {
@@ -161,13 +155,12 @@ class ProfileApiController extends AbstractController
         return new JsonResponse(['success' => true, 'message' => 'Points deducted successfully.', 'user' => $this->serializeUser($targetUser)]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/api/profile/delete-account', name: 'api_profile_delete_account', methods: ['POST'])]
     public function deleteAccount(Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        /** @var User $actor */
         $actor = $this->getUser();
-        if (!$actor instanceof User || !$actor->isAdmin()) {
-            return new JsonResponse(['success' => false, 'message' => 'Forbidden. Admin privileges are required.'], Response::HTTP_FORBIDDEN);
-        }
 
         $targetUser = $this->resolveTargetUser($request, $doctrine, $actor);
         if (!$targetUser) {
@@ -187,7 +180,7 @@ class ProfileApiController extends AbstractController
         if ($userId <= 0) {
             return null;
         }
-        if (!$actor->isAdmin() && $userId !== ($actor->getId() ?? 0)) {
+        if (!$this->isGranted('ROLE_ADMIN') && $userId !== ($actor->getId() ?? 0)) {
             return null;
         }
 

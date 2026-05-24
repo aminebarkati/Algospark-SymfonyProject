@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}AlgoSpark - {{ error_title|default('Error') }}{% endblock %}
+
+{% block body %}
+    <main class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-12 col-lg-10 col-xl-8">
+                <div class="card shadow-sm border-0 overflow-hidden">
+                    <div class="row g-0">
+                        <div class="col-md-4 bg-primary text-white d-flex align-items-center justify-content-center p-4">
+                            <div class="text-center">
+                                <object data="/assets/media/svg-components/code-slash.svg" type="image/svg+xml" width="96" height="96" class="mb-3"></object>
+                                <div class="h2 mb-0">AlgoSpark</div>
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="card-body p-4 p-md-5">
+                                <div class="display-5 fw-bold text-info mb-2">{{ error_code|default(status_code) }}</div>
+                                <h1 class="h3 mb-3">{{ error_title|default('Something went wrong') }}</h1>
+                                <p class="text-secondary mb-4">{{ error_message|default(status_text|default('An unexpected error occurred.')) }}</p>
+                                <div class="d-flex flex-wrap gap-2">
+                                    <a href="/" class="btn btn-primary">Home</a>
+                                    <a href="{{ path('problems_index') }}" class="btn btn-light">Problemset</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

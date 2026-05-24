@@ -7,25 +7,24 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ProfileController extends AbstractController
 {
+    #[IsGranted('ROLE_USER')]
     #[Route('/profile', name: 'profile_show_current')]
     public function edit(Request $request, UserRepository $users): Response
     {
+        /** @var User $currentUser */
         $currentUser = $this->getUser();
-        if (!$currentUser instanceof User) {
-            return $this->render('profile/edit.html.twig', ['targetUser' => null, 'actorUser' => null]);
-        }
-
         $actorUser = $users->find($currentUser->getId());
         if (!$actorUser) {
             return $this->render('profile/edit.html.twig', ['targetUser' => null, 'actorUser' => null]);
         }
         $targetUser = $actorUser;
         $requestedTargetId = (int) $request->query->get('user_id', $actorUser?->getId() ?? 0);
-        if ($actorUser && $actorUser->isAdmin() && $requestedTargetId > 0) {
+        if ($this->isGranted('ROLE_ADMIN') && $requestedTargetId > 0) {
             $candidate = $users->find($requestedTargetId);
             if ($candidate) {
                 $targetUser = $candidate;
@@ -48,7 +47,8 @@ class ProfileController extends AbstractController
 
         $currentUser = $this->getUser();
         $isFavourite = false;
-        if ($currentUser instanceof User) {
+        if ($this->isGranted('ROLE_USER')) {
+            /** @var User $currentUser */
             $isFavourite = null !== $favorites->checkFavoriteById($currentUser->getId() ?? 0, $targetUser->getId() ?? 0);
         }
 

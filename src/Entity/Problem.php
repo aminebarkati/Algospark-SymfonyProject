@@ -44,11 +44,11 @@ class Problem
     #[ORM\Column(type: 'decimal', precision: 5, scale: 2)]
     private string $acceptanceRate = '0.00';
 
-    #[ORM\Column(type: 'datetime', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
-    private \DateTimeInterface $createdAt;
+    #[ORM\Column(type: 'datetime_immutable', name: 'created_at', options: ['default' => 'CURRENT_TIMESTAMP'])]
+    private \DateTimeImmutable $createdAt;
 
-    #[ORM\Column(type: 'datetime', name: 'updated_at', nullable: true, options: ['default' => null])]
-    private ?\DateTimeInterface $updatedAt = null;
+    #[ORM\Column(type: 'datetime_immutable', name: 'updated_at', nullable: true, options: ['default' => null])]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     public function getId(): ?int { return $this->id; }
     public function getTitle(): string { return $this->title; }
@@ -75,6 +75,6 @@ class Problem
     public function getSuccessCount(): int { return $this->successCount; }
     public function getTotalAttempts(): int { return $this->totalAttempts; }
     public function getAcceptanceRate(): float { return (float) $this->acceptanceRate; }
-    public function getCreatedAt(): \DateTimeInterface { return $this->createdAt; }
-    public function getUpdatedAt(): ?\DateTimeInterface { return $this->updatedAt; }
+    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
+    public function getUpdatedAt(): ?\DateTimeImmutable { return $this->updatedAt; }
 }

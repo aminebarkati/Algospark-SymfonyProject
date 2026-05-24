@@ -42,4 +42,14 @@ class FavoriteRepository extends ServiceEntityRepository
         $em->flush();
         return $favorite;
     }
+
+    public function countByUserId(int $userId): int
+    {
+        return (int) $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->andWhere('IDENTITY(f.user) = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

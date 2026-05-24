@@ -27,6 +27,30 @@ class SubmissionRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function countByUserId(int $userId): int
+    {
+        return (int) $this->createQueryBuilder('s')
+            ->select('COUNT(s.id)')
+            ->andWhere('IDENTITY(s.user) = :userId')
+            ->setParameter('userId', $userId)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function countSolvedProblemsByUserId(int $userId): int
+    {
+        return (int) $this->createQueryBuilder('s')
+            ->select('COUNT(DISTINCT p.id)')
+            ->join('s.problem', 'p')
+            ->join('s.verdict', 'v')
+            ->andWhere('IDENTITY(s.user) = :userId')
+            ->andWhere('v.verdict = :acceptedVerdict')
+            ->setParameter('userId', $userId)
+            ->setParameter('acceptedVerdict', 'AC')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     /** @return Submission[] */
     public function findByUserId(int $userId): array
     {

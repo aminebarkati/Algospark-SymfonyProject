@@ -14,6 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Routing\Annotation\Route;
 
 class SubmissionController extends AbstractController
@@ -27,13 +28,12 @@ class SubmissionController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/problems/{id}/submit', name: 'submission_create', methods: ['POST'])]
     public function create(int $id, Request $request, ManagerRegistry $doctrine): JsonResponse
     {
+        /** @var User $currentUser */
         $currentUser = $this->getUser();
-        if (!$currentUser instanceof User) {
-            return new JsonResponse(['success' => false, 'message' => 'Unauthorized. Please log in.'], Response::HTTP_UNAUTHORIZED);
-        }
 
         $problem = $doctrine->getRepository(Problem::class)->find($id);
         if (!$problem) {
@@ -87,17 +87,16 @@ class SubmissionController extends AbstractController
     public function filter(Request $request, SubmissionRepository $submissions): JsonResponse
     {
         $type = (string) $request->query->get('type', 'all');
-        $currentUser = $this->getUser();
 
         if ($type === 'me') {
-            if (!$currentUser instanceof User) {
-                return new JsonResponse(['error' => 'Not logged in'], Response::HTTP_UNAUTHORIZED);
-            }
+            $this->denyAccessUnlessGranted('ROLE_USER');
+            /** @var User $currentUser */
+            $currentUser = $this->getUser();
             $rows = $submissions->findByUserId($currentUser->getId() ?? 0);
         } elseif ($type === 'favourites') {
-            if (!$currentUser instanceof User) {
-                return new JsonResponse(['error' => 'Not logged in'], Response::HTTP_UNAUTHORIZED);
-            }
+            $this->denyAccessUnlessGranted('ROLE_USER');
+            /** @var User $currentUser */
+            $currentUser = $this->getUser();
             $rows = $submissions->findAllFavoritesByUserId($currentUser->getId() ?? 0);
         } else {
             $rows = $submissions->findLatest(20);
@@ -129,13 +128,12 @@ class SubmissionController extends AbstractController
         return new JsonResponse(['submissions' => $data]);
     }
 
+    #[IsGranted('ROLE_USER')]
     #[Route('/api/problems/{id}/recent-submissions', name: 'problem_recent_submissions')]
     public function recent(int $id, SubmissionRepository $submissions): JsonResponse
     {
+        /** @var User $currentUser */
         $currentUser = $this->getUser();
-        if (!$currentUser instanceof User) {
-            return new JsonResponse(['success' => false, 'message' => 'Unauthorized. Please log in.'], Response::HTTP_UNAUTHORIZED);
-        }
 
         $rows = $submissions->findRecentByUserAndProblem($currentUser->getId() ?? 0, $id, 5);
         return new JsonResponse(['success' => true, 'message' => 'Recent submissions loaded.', 'items' => $rows]);

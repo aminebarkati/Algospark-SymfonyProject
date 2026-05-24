@@ -9,10 +9,10 @@
             <thead>
                 <th>Id</th>
                 <th>Title</th>
-                <th></th>
                 <th>difficulity</th>
                 <th>Solves</th>
                 <th>Success Rate</th>
+                <th></th>
             </thead>
             <tbody>
                 {% for problem in problems %}
@@ -22,15 +22,14 @@
                             <a href="{{ path('problems_show', {id: problem.id}) }}"><h6 class="text-info">{{ problem.title }}</h6></a>
                             <small>{{ problem.category }}</small>
                         </td>
-                        <td>
-                            {% set diff = problem.createdAt and date().diff(problem.createdAt).days < 5 ? 'New' : '' %}
-                            {{ diff }}
-                        </td>
                         <td><h6 class="text-secondary">{{ problem.difficulty }}</h6></td>
                         <td>{{ problem.successCount }}</td>
                         <td>{{ problem.acceptanceRate }} %</td>
-                        <td><a href="{{ path('problems_show', {id: problem.id}) }}" class="enterBtn text-info">Enter &gt;</a></td>
-                    </tr>
+                                                <td>
+                            {% set diff = problem.createdAt and date().diff(problem.createdAt).days < 5 ? 'New' : '' %}
+                            {{ diff }}
+                        </td>
+                        </tr>
                 {% endfor %}
             </tbody>
         </table>
