@@ -42,10 +42,10 @@ class Submission
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $errorMessage = null;
 
-    #[ORM\Column(type: 'datetime', name: 'submitted_at')]
+    #[ORM\Column(type: 'datetime_immutable', name: 'submitted_at')]
     private \DateTimeInterface $submittedAt;
 
-    #[ORM\Column(type: 'datetime', name: 'judged_at', nullable: true)]
+    #[ORM\Column(type: 'datetime_immutable', name: 'judged_at', nullable: true)]
     private ?\DateTimeInterface $judgedAt = null;
 
     #[ORM\Column(type: 'integer', name: 'passed_tests', options: ['default' => 0])]

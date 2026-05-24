@@ -5,7 +5,7 @@
 {% block body %}
     <div class="container mt-4">
         <div class="table-responsive">
-            <table class="table table-striped align-middle table-hover caption-top test-info">
+            <table id="submissionsTable" class="table table-striped align-middle table-hover caption-top test-info">
                 <caption>
                     Submissions
                     {% if currentUser %}
@@ -38,7 +38,7 @@
                         <th scope="col">Memory</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="submissionsTableBody" class="table-group-divider">
                 </tbody>
             </table>
         </div>

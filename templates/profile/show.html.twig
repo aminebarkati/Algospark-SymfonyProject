@@ -1,6 +1,6 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profile - {{ user.username }}{% endblock %}
+{% block title %}Profile - {{ targetUser.username }}{% endblock %}
 
 {% block body %}
     <main class="container py-4">
@@ -10,10 +10,10 @@
                     <div class="card-body p-4">
                         <div class="d-flex flex-column flex-md-row align-items-center gap-4">
                             <div class="position-relative">
-                                {% set avatarUrlValue = user.avatarUrl ? user.avatarUrl|trim : '' %}
+                                {% set avatarUrlValue = targetUser.avatarUrl ? targetUser.avatarUrl|trim : '' %}
                                 {% set avatarSrc = avatarUrlValue ? '/storage/imgs/' ~ avatarUrlValue|url_encode : '' %}
                                 {% set showAvatarImage = avatarSrc != '' %}
-                                {% set initial = user.username|slice(0,1)|upper %}
+                                {% set initial = targetUser.username|slice(0,1)|upper %}
                                 {% if showAvatarImage %}
                                     <img id="profileAvatarImage" src="{{ avatarSrc }}" alt="Profile avatar" class="rounded-circle border" style="width: 96px; height: 96px; object-fit: cover;" onerror="this.classList.add('d-none'); this.nextElementSibling.classList.remove('d-none');">
                                 {% endif %}

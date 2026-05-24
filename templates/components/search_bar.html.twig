@@ -4,14 +4,29 @@
             <input type="search" class="form-control" placeholder="Search..." aria-label="Search" />
         </form>
         {% if app.user is null %}
-            <div class="d-flex gap-2">
-                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#LogModal">Login</button>
-                <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#signmodal">Sign Up</button>
+            <div class="btns-bar">
+                <button
+                    type="button"
+                    class="btn btn-light tex me-2"
+                    id="logbtn"
+                    data-bs-toggle="modal"
+                    data-bs-target="#LogModal">
+                    Log In
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#signmodal"
+                    id="signbtn">
+                    Sign Up
+                </button>
             </div>
         {% else %}
-            <div class="d-flex align-items-center gap-2">
-                <span class="text-secondary">{{ app.user.userIdentifier }}</span>
-                <a href="{{ path('app_logout') }}" class="btn btn-light">Logout</a>
+            <div class="btns-bar">
+                <form method="post" action="{{ path('app_logout') }}">
+                    <input type="submit" id="logbtn" class="btn btn-light tex me-2" name="action" value="Logout">
+                </form>
             </div>
         {% endif %}
     </div>
