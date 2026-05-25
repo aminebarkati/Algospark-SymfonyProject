@@ -30,7 +30,7 @@ class AuthController extends AbstractController
         }
 
         // Programmatically authenticate and start session
-        $resp = $userAuthenticator->authenticateUser($user, $authenticator, $request);
+        $userAuthenticator->authenticateUser($user, $authenticator, $request);
 
         return new JsonResponse(['success' => true, 'redirect' => $this->generateUrl('problems_index')]);
     }
